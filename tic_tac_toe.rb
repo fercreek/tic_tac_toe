@@ -72,6 +72,45 @@ def player_input(board, game_mode)
   option.to_i if from_one_to_nine?(option)
 end
 
+def game(board, game_mode)
+  display_board(board)
+  loop do
+    players = game_players(game_mode)
+
+    current_player_indicator = current_player(board)
+    player = current_player_indicator == 'X' ? players[0] : players[1]
+
+    puts "#{player}, select one cell from 1 to 9"
+
+    option = player_input(board, game_mode)
+
+    while not from_one_to_nine?(option)
+      puts 'Your input is not valid. Try again with another option.'
+      option = gets.chomp
+      option = option.to_i if from_one_to_nine?(option)
+    end
+
+    if position_taken?(board, option)
+      board[option] = current_player_indicator
+    else
+      puts 'Option selected, try again with another option'
+      next
+    end
+
+    if winner?(board, current_player_indicator)
+      display_board(board)
+      puts "#{current_player_indicator} is the winner!"
+      break
+    end
+
+    if full?(board)
+      display_board(board)
+      puts 'Tie!'
+      break
+    end
+  end
+end
+
 puts 'Tic tac toe'
 puts 'Welcome to Tic Tac Toe'
 
@@ -89,68 +128,4 @@ loop do
   puts 'Try again with another option'
 end
 
-loop do
-  display_board(board)
-
-  players = game_players(game_mode)
-
-  if current_player(board) == 'X'
-    puts "#{players[0]}, select one cell from 1 to 9"
-
-    option = player_input(board, game_mode)
-
-    while not from_one_to_nine?(option)
-      puts 'Your input is not valid. Try again with another option.'
-      option = gets.chomp
-      option = option.to_i if from_one_to_nine?(option)
-    end
-
-    if position_taken?(board, option)
-      board[option] = 'X'
-    else
-      puts 'Option selected, try again with another option'
-      next
-    end
-
-    if winner?(board, 'X')
-      display_board(board)
-      puts 'X is the winner!'
-      break
-    end
-
-    if full?(board)
-      display_board(board)
-      puts 'Tie!'
-      break
-    end
-  elsif current_player(board) == 'O'
-    puts "#{players[1]}, select one cell from 1 to 9"
-
-    option = player_input(board, game_mode)
-
-    while not from_one_to_nine?(option)
-      puts 'Your input is not valid. Try again with another option.'
-      option = gets.chomp
-      option = option.to_i if from_one_to_nine?(option)
-    end
-
-    if position_taken?(board, option)
-      board[option] = 'O'
-    else
-      puts 'Option selected, try again with another option'
-      next
-    end
-
-    if winner?(board, 'O')
-      display_board(board)
-      puts 'O is the winner!'
-      break
-    end
-
-    if full?(board)
-      display_board(board)
-      puts 'Tie!'
-      break
-    end
-  end
-end
+game(board, game_mode)
