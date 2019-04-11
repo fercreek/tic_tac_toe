@@ -73,8 +73,8 @@ def player_input(board, game_mode)
 end
 
 def game(board, game_mode)
-  display_board(board)
   loop do
+    display_board(board)
     players = game_players(game_mode)
 
     current_player_indicator = current_player(board)
