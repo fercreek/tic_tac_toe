@@ -4,6 +4,17 @@
 # It can be played with humans or computer
 # Simple user interfaces
 
+WIN_COMBINATIONS = [
+  [1,2,3],
+  [4,5,6],
+  [7,8,9],
+  [1,4,7],
+  [2,5,8],
+  [3,6,9],
+  [1,5,9],
+  [3,5,7]
+]
+
 def display_board(board)
   puts '   |   |   '
   puts " #{board[1]} | #{board[2]} | #{board[3]} "
@@ -18,15 +29,16 @@ def display_board(board)
   puts '   |   |   '
 end
 
+def check_win_combination?(board, player, win_combo)
+  win_combo.all? do |position|
+    board[position] == player
+  end
+end
+
 def winner?(board, player)
-  (board[1] == player && board[2] == player && board[3] == player) ||
-  (board[4] == player && board[5] == player && board[6] == player) ||
-  (board[7] == player && board[8] == player && board[9] == player) ||
-  (board[1] == player && board[4] == player && board[7] == player) ||
-  (board[2] == player && board[5] == player && board[8] == player) ||
-  (board[3] == player && board[6] == player && board[9] == player) ||
-  (board[1] == player && board[5] == player && board[9] == player) ||
-  (board[3] == player && board[5] == player && board[7] == player)
+  WIN_COMBINATIONS.any? do |win_combo|
+    check_win_combination?(board, player, win_combo)
+  end
 end
 
 def full?(board)
