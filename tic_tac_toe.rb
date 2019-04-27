@@ -42,11 +42,11 @@ def position_taken?(board, index)
 end
 
 def game_players(game_mode)
-  if game_mode == 1
+  if game_mode == :multi_player
     ['Player 1', 'Player 2']
-  elsif game_mode == 2
+  elsif game_mode == :single_player
     ['Player 1', 'Computer 1']
-  elsif game_mode == 3
+  elsif game_mode == :computer
     ['Computer 1', 'Computer 2']
   end
 end
@@ -64,7 +64,7 @@ def current_player(board)
 end
 
 def player_input(board, game_mode)
-  if game_mode == 1 || (game_mode == 2 && current_player(board) == 'X')
+  if game_mode == :multi_player || (game_mode == :single_player && current_player(board) == 'X')
     option = gets.chomp
   else
     option = (1..9).to_a.sample
@@ -111,19 +111,30 @@ def game(board, game_mode)
   end
 end
 
+def game_mode_int_to_symbol(game_mode)
+  if game_mode == 1
+    :multi_player
+  elsif game_mode == 2
+    :single_player
+  elsif game_mode == 3
+    :computer
+  end
+end
+
 puts 'Tic tac toe'
 puts 'Welcome to Tic Tac Toe'
 
 board = ['', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
-game_mode = 0
+game_mode = nil
 
 loop do
   puts 'Game modes: '
   puts '1 - Human vs Human'
   puts '2 - Human vs Computer'
   puts '3 - Computer vs Computer'
-  game_mode = gets.chomp.to_i
-  break if [1, 2, 3].include? game_mode
+  game_mode = game_mode_int_to_symbol(gets.chomp.to_i)
+
+  break if [:multi_player, :single_player, :computer].include? game_mode
 
   puts 'Try again with another option'
 end
